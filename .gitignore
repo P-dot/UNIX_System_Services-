@@ -1,0 +1,15 @@
+# Raw/private material that should not be published
+**/evidence/raw/
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+*.kdb
+*.sth
+
+# Local/editor artifacts
+.DS_Store
+Thumbs.db
+*.tmp
+~$*.docx

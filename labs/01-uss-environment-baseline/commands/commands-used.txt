@@ -1,0 +1,28 @@
+# Lab 01 - commands/actions used
+# Read-only baseline; no configuration changes.
+
+# TSO/E -> USS
+OMVS
+
+# USS shell
+id
+pwd
+ls -la
+echo $HOME
+echo $SHELL
+df -k
+mount
+echo $PATH
+whence mount
+
+# RACF from TSO command environment
+LU IBMUSER OMVS
+LG SYS1 OMVS
+
+# SDSF / operator commands
+D OMVS,O
+D IPLINFO
+
+# ISPF browse targets
+ADCD.Z111S.PARMLIB(IEASYSDB)
+ADCD.Z111S.PARMLIB(BPXPRMDB)

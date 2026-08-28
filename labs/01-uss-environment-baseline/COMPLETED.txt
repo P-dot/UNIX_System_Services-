@@ -1,0 +1,15 @@
+Lab 01 - z/OS UNIX System Services Environment Baseline
+Status: COMPLETED
+
+Validated evidence:
+- OMVS shell access
+- UID/GID and RACF OMVS segments
+- HOME and shell
+- home directory listing
+- mounted filesystem map via df -k
+- HFS/zFS mixed layout
+- OMVS active configuration via D OMVS,O
+- IPL/PARMLIB chain via D IPLINFO, IEASYSDB and BPXPRMDB
+- troubleshooting evidence for unavailable mount utility
+
+No system configuration was changed during this lab.

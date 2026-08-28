@@ -1,0 +1,7 @@
+Security scan - Lab 01 package
+Generated: 2026-08-28T22:23:19Z
+
+Private IP / MAC textual scan:
+OK - no private IP/MAC textual patterns found
+
+Screenshot review: no host IP/MAC/adapter identifiers observed in the supplied lab evidence.
