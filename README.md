@@ -37,3 +37,20 @@ The goal is to document USS as an integrated part of z/OS rather than as an isol
 5. MVS-to-USS data integration.
 6. JCL-driven USS execution with BPXBATCH.
 7. Operations, processes, logging and troubleshooting.
+
+---
+
+## Part of the z/OS Engineering Laboratory
+
+This repository is a specialized component of the broader **z/OS Engineering Laboratory** built on z/OS ADCD 1.11 / Hercules.
+
+### Master architecture
+
+https://github.com/P-dot/zos-adcd-hercules-engineering-lab
+
+### Engineering methodology
+
+```text
+Build -> Execute -> Observe -> Diagnose -> Correct -> Validate -> Document
+```
+
