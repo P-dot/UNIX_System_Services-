@@ -1,0 +1,19 @@
+LAB 02 - USS FILESYSTEM, FILES, LINKS AND POSIX PERMISSIONS
+STATUS: COMPLETED
+FINAL VALIDATION: RC=0
+
+Validated:
+- isolated workspace under /u/ibmuser/uss-lab02
+- umask 0022
+- directory and regular-file default modes
+- symbolic and octal chmod
+- shell redirection and append
+- cp and mv
+- hard links and symbolic links
+- broken symlink behavior
+- directory permission changes and restoration
+- owner execute bit
+- ./runlab -> USS-LAB02-OK
+- echo $? -> 0
+
+All lab changes were confined to the dedicated USS lab directory.

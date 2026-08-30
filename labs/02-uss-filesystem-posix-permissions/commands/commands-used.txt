@@ -1,0 +1,74 @@
+# Lab 02 command record
+
+pwd
+mkdir uss-lab02
+ls -ld uss-lab02
+umask
+
+cd uss-lab02
+mkdir data logs scripts
+ls -la
+
+touch data/sample.txt
+ls -l data/sample.txt
+chmod go-r data/sample.txt
+ls -l data/sample.txt
+chmod 640 data/sample.txt
+ls -l data/sample.txt
+
+# Initial long-input attempt retained as troubleshooting evidence.
+# Successful minimal redirection diagnostic:
+cd data
+echo TEST
+echo TEST > test.txt
+ls -l test.txt
+cat test.txt
+
+# Validated lab data:
+echo RECORD1 > sample.txt
+echo RECORD2 >> sample.txt
+cat sample.txt
+ls -l sample.txt
+
+cp sample.txt sample-copy.txt
+ls -l sample.txt sample-copy.txt
+cat sample-copy.txt
+
+mv sample-copy.txt sample-backup.txt
+ls -l
+cat sample-backup.txt
+
+ln sample.txt sample-hardlink.txt
+ls -li sample.txt sample-hardlink.txt
+
+ln -s sample.txt sample-symlink.txt
+ls -li sample.txt sample-hardlink.txt sample-symlink.txt
+
+rm sample.txt
+ls -li
+cat sample-hardlink.txt
+cat sample-symlink.txt
+
+rm sample-symlink.txt
+mv sample-hardlink.txt sample.txt
+rm test.txt
+ls -li
+cat sample.txt
+
+cd ..
+ls -ld logs
+chmod 700 logs
+ls -ld logs
+chmod 755 logs
+ls -ld . data logs scripts
+ls -l data
+
+cd scripts
+echo "echo USS-LAB02-OK" > runlab
+ls -l runlab
+cat runlab
+chmod u+x runlab
+ls -l runlab
+./runlab
+echo $?
+ls -l runlab
