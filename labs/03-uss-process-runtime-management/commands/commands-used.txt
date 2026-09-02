@@ -1,0 +1,31 @@
+# Lab 03 — commands used
+
+ps
+ps -f
+
+sleep 60 &
+ps -f
+ps -f
+jobs
+echo $?
+
+sleep 300 &
+jobs
+ps -f
+kill %1
+jobs
+ps -f
+
+sleep 120 &
+echo $!
+wait $!
+echo $?
+
+sleep 300 &
+jobs
+kill $!
+wait $!
+echo $?
+
+jobs
+ps -f

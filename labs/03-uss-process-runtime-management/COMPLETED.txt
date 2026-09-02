@@ -1,0 +1,16 @@
+LAB 03: USS Process and Runtime Management
+STATUS: COMPLETED
+
+Validated outcomes:
+- ps and ps -f process inspection
+- PID/PPID parent-child correlation
+- foreground shell vs background process behavior
+- jobs-based shell job control
+- controlled termination with kill
+- dynamic background PID retrieval with $!
+- wait and $? status collection
+- normal completion status 0
+- SIGTERM-related observed status 143
+- final verification with no test sleep process remaining
+
+Evidence: 13 screenshots plus cumulative source DOCX.
