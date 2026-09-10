@@ -1,0 +1,6 @@
+Lab 04 Part 1 - Publication Security Scan
+
+Scope: generated Markdown/TXT documentation.
+Note: keyword occurrences in security guidance are descriptive, not discovered credentials.
+
+No configured patterns detected.

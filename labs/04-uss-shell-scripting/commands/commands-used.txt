@@ -1,0 +1,70 @@
+# Lab 04 - Part 1 - Commands Used
+
+echo $SHELL
+ls -l /bin/sh
+
+mkdir -p ~/uss-lab04
+cd ~/uss-lab04
+pwd
+
+echo 'echo USS-LAB04-HELLO' > hello.sh
+ls -l hello.sh
+cat hello.sh
+chmod u+x hello.sh
+ls -l hello.sh
+./hello.sh
+echo $?
+
+echo 'LAB="USS-LAB04"' > variables.sh
+echo 'MESSAGE="VARIABLES-OK"' >> variables.sh
+echo 'echo "$LAB $MESSAGE"' >> variables.sh
+cat variables.sh
+chmod u+x variables.sh
+./variables.sh
+echo $?
+
+echo 'echo "SCRIPT=$0"' > arguments.sh
+echo 'echo "ARG1=$1"' >> arguments.sh
+echo 'echo "ARG2=$2"' >> arguments.sh
+echo 'echo "ARGCOUNT=$#"' >> arguments.sh
+cat arguments.sh
+chmod u+x arguments.sh
+./arguments.sh START PROD
+echo $?
+
+echo 'if test "$1" = "START"' > conditional.sh
+echo 'then' >> conditional.sh
+echo '  echo "ACTION=START"' >> conditional.sh
+echo 'else' >> conditional.sh
+echo '  echo "ACTION=UNKNOWN"' >> conditional.sh
+echo 'fi' >> conditional.sh
+cat conditional.sh
+chmod u+x conditional.sh
+./conditional.sh START
+echo $?
+./conditional.sh STOP
+echo $?
+
+echo 'if test "$1" = "START"' > conditional-rc.sh
+echo 'then' >> conditional-rc.sh
+echo '  echo "ACTION=START"' >> conditional-rc.sh
+echo '  exit 0' >> conditional-rc.sh
+echo 'else' >> conditional-rc.sh
+echo '  echo "ACTION=INVALID"' >> conditional-rc.sh
+echo '  exit 8' >> conditional-rc.sh
+echo 'fi' >> conditional-rc.sh
+cat conditional-rc.sh
+chmod u+x conditional-rc.sh
+./conditional-rc.sh START
+echo $?
+./conditional-rc.sh STOP
+echo $?
+
+echo 'for ITEM in ONE TWO THREE' > loop.sh
+echo 'do' >> loop.sh
+echo '  echo "ITEM=$ITEM"' >> loop.sh
+echo 'done' >> loop.sh
+cat loop.sh
+chmod u+x loop.sh
+./loop.sh
+echo $?
