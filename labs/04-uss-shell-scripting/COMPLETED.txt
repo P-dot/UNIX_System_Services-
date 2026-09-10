@@ -1,0 +1,12 @@
+LAB 04 - CONTROLLED USS SHELL SCRIPTING
+PART 1: COMPLETED
+PART 2: PENDING
+
+Validated in Part 1:
+- /bin/sh baseline
+- executable shell scripts
+- variables
+- positional parameters
+- conditionals
+- explicit return codes (0 and 8)
+- for loop
