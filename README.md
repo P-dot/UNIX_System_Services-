@@ -1,490 +1,264 @@
 # z/OS UNIX System Services Engineering Labs
 
-Hands-on engineering labs for **z/OS UNIX System Services (USS)** on an ADCD / Hercules environment.
+Hands-on engineering labs for **z/OS UNIX System Services (USS)** in an ADCD / Hercules environment.
 
-This repository documents USS as an integrated part of z/OS rather than as an isolated UNIX shell. The labs focus on the relationship between OMVS, POSIX identity, RACF, HFS/zFS, PARMLIB-selected USS configuration, filesystem behavior, process management and future MVS-to-USS integration.
+This repository is the **USS / OMVS / POSIX runtime layer** of the wider IBM z/OS engineering portfolio. It documents how UNIX semantics behave inside z/OS and preserves evidence from the actual tested environment rather than assuming GNU/Linux behavior.
+
+> **Current evidence boundary:** Labs 01–03 are completed. Lab 04 Part 1 is completed; Part 2 remains pending. Cross-domain integrations such as BPXBATCH/JCL, scheduler-driven USS execution and network-facing USS services are roadmap work unless explicitly backed by evidence.
+
+---
+
+## Quick navigation
+
+| Area | Destination |
+|---|---|
+| Engineering portfolio | [P-dot portfolio](https://github.com/P-dot/P-dot) |
+| Detailed ecosystem integration | [docs/ECOSYSTEM-INTEGRATION.md](docs/ECOSYSTEM-INTEGRATION.md) |
+| Lab 01 — Environment baseline | [Open lab](labs/01-uss-environment-baseline/) |
+| Lab 02 — Filesystem & POSIX permissions | [Open lab](labs/02-uss-filesystem-posix-permissions/) |
+| Lab 03 — Process & runtime management | [Open lab](labs/03-uss-process-runtime-management/) |
+| Lab 04 — Controlled shell scripting | [Open lab](labs/04-uss-shell-scripting/) |
+| Core z/OS engineering | [zos-adcd-hercules-engineering-lab](https://github.com/P-dot/zos-adcd-hercules-engineering-lab) |
+| Architecture V2 | [Architecture V2](https://github.com/P-dot/zos-adcd-hercules-engineering-lab/tree/main/docs/architecture/v2) |
+| Engineering Control | [Engineering Control](https://github.com/P-dot/zos-adcd-hercules-engineering-lab/tree/main/docs/engineering-control) |
 
 ---
 
 ## Repository role
 
-`UNIX_System_Services-` is the **USS / OMVS / POSIX runtime layer** of the wider z/OS Engineering Laboratory.
+`UNIX_System_Services-` owns practical engineering evidence for the UNIX-facing runtime inside z/OS:
 
-Its role is to show how UNIX semantics are exposed inside z/OS and how they connect with:
+- OMVS and `/bin/sh`;
+- POSIX UID/GID observation;
+- RACF-backed UNIX identity as observed from USS;
+- HFS/zFS pathname-space observation;
+- files, directories, permissions and links;
+- processes, PID/PPID, shell jobs and signals;
+- exit-status interpretation;
+- controlled POSIX shell scripting.
 
-- RACF identities and OMVS segments;
-- HFS and zFS filesystems;
-- PARMLIB-selected USS configuration;
-- UNIX files, directories and permissions;
-- shell execution;
-- processes, jobs and signals;
-- future shell scripting;
-- future MVS-to-USS data movement;
-- future JCL / BPXBATCH integration;
-- future network-service correlation.
-
-This repository does not replace the dedicated RACF, Communications Server, JCL, scheduler or core z/OS engineering repositories. It focuses on the USS runtime boundary where those areas meet.
+It does **not** replace the repositories that own RACF policy, TCP/IP configuration, JCL/JES2 orchestration, workload scheduling, or system-wide z/OS configuration.
 
 ---
 
 ## Environment
 
-Current lab environment:
+The published evidence was produced in the tested laboratory environment:
 
-- z/OS 1.11 ADCD
-- Hercules
-- TSO/E
-- ISPF
-- SDSF
-- UNIX System Services / OMVS
-- RACF
-- HFS / zFS
-- shell utilities available in the tested environment
+- IBM z/OS 1.11 ADCD;
+- Hercules;
+- TSO/E, ISPF and SDSF;
+- z/OS UNIX System Services / OMVS;
+- RACF;
+- HFS and zFS;
+- `/bin/sh`.
 
-The repository documents the behavior actually observed in this environment. It does not assume that modern GNU/Linux behavior or newer z/OS facilities are automatically available.
+Results are version- and environment-specific where appropriate.
 
 ---
 
-## Current lab progression
+## Lab progression
 
-| Lab | Topic | Status |
+| Lab | Engineering focus | Evidence state |
 |---|---|---|
-| 01 | USS Environment Baseline | Completed |
-| 02 | USS Filesystem and POSIX Permissions | Completed |
-| 03 | USS Process and Runtime Management | Completed |
-
-The current sequence is intentional:
+| [01](labs/01-uss-environment-baseline/) | USS environment baseline | **COMPLETED** |
+| [02](labs/02-uss-filesystem-posix-permissions/) | Filesystem, links and POSIX permissions | **COMPLETED** |
+| [03](labs/03-uss-process-runtime-management/) | Process and runtime management | **COMPLETED** |
+| [04](labs/04-uss-shell-scripting/) | Controlled shell scripting | **PART 1 COMPLETED / PART 2 PENDING** |
 
 ```text
-understand the environment
-        |
-        v
-understand the filesystem model
-        |
-        v
-understand the process model
+Environment
+    |
+    v
+Filesystem / permissions
+    |
+    v
+Processes / runtime
+    |
+    v
+Shell scripting
+    |
+    +--> Part 1: fundamentals validated
+    |
+    +--> Part 2: pending
 ```
 
-These three labs establish the baseline required before introducing shell scripting, BPXBATCH, non-privileged identity testing or network-facing USS services.
+### Lab 01 — Environment baseline
+
+Establishes the active USS baseline and correlates OMVS access, effective POSIX identity, RACF OMVS attributes, HFS/zFS observations and the IPL/PARMLIB/BPXPRM configuration chain.
+
+### Lab 02 — Filesystem and POSIX permissions
+
+Validates controlled filesystem operations, `umask`, `chmod`, redirection, copy/rename, hard links, symbolic links and executable-file behavior.
+
+Because the observed laboratory identity is privileged, this lab does **not** claim ordinary-user authorization-denial validation.
+
+### Lab 03 — Process and runtime management
+
+Validates PID/PPID observation, foreground/background execution, shell job control, `$!`, `kill`, `wait`, `$?`, normal completion and signal termination.
+
+The observed SIGTERM path returned status `143`; the lab records this as observed shell behavior and relates it to `128 + 15`.
+
+### Lab 04 — Controlled shell scripting
+
+Part 1 validates `/bin/sh` scripting fundamentals:
+
+- executable shell scripts;
+- variables and expansion;
+- positional parameters;
+- POSIX conditionals;
+- explicit application return codes;
+- `for` iteration.
+
+The deliberately selected `RC=8` demonstrates explicit process-status control; it is **not** presented as a universal z/OS return-code meaning.
+
+Part 2 remains pending and is expected to continue with functions, stdout/stderr, redirection, pipelines, controlled error handling, cleanup and combined operational scripting.
 
 ---
 
-# Lab 01 — USS Environment Baseline
+## Validated capability map
 
-## Objective
+### VALIDATED LOCALLY
 
-Establish a read-only baseline of the active USS environment and prove the relationship between:
-
-- OMVS shell access;
-- current USS identity;
-- RACF OMVS attributes;
-- mounted filesystems;
-- active OMVS configuration;
-- PARMLIB selection;
-- BPXPRM configuration.
-
-## What was validated
-
-The lab confirms:
-
-- OMVS shell availability;
-- current working directory;
-- HOME and shell values;
-- effective numeric UID and GID;
-- RACF OMVS segment attributes;
-- mixed HFS / zFS filesystem usage;
-- active OMVS state;
-- IPL / IEASYS selection;
-- BPXPRM selection;
-- effective USS configuration.
-
-## Configuration chain
-
-```text
-IPL
- |
- +-- IEASYS LIST = DB
-       |
-       +-- IEASYSDB
-             |
-             +-- OMVS=DB
-                   |
-                   +-- BPXPRMDB
-                         |
-                         +-- USS limits
-                         +-- FILESYSTYPE definitions
-                         +-- MOUNT statements
-                         +-- NETWORK definitions
-                               |
-                               v
-                         active z/OS UNIX
-```
-
-This demonstrates that USS is part of the z/OS system configuration selected during IPL.
-
-## Identity observation
-
-The lab correlates the shell session with RACF OMVS attributes.
-
-Conceptually:
-
-```text
-RACF user
-   |
-   +--> OMVS segment
-            |
-            +--> UID
-            +--> HOME
-            +--> PROGRAM
-
-RACF group
-   |
-   +--> OMVS segment
-            |
-            +--> GID
-```
-
-The observed session used privileged numeric UID/GID values.
-
-The lab keeps numeric identity and symbolic name resolution conceptually separate and does not treat them as interchangeable identities.
-
-## Important limitation
-
-This lab is primarily observational and read-only.
-
-It does not modify:
-
-- RACF profiles;
-- PARMLIB;
-- filesystem mounts;
-- system-wide OMVS configuration;
-- UNIX permission policy.
-
----
-
-# Lab 02 — USS Filesystem and POSIX Permissions
-
-## Objective
-
-Build a controlled USS workspace and demonstrate practical POSIX filesystem behavior.
-
-The lab covers:
-
-- directories;
-- regular files;
-- shell redirection;
-- `umask`;
-- permission bits;
-- `chmod`;
-- copy and rename;
-- hard links;
-- symbolic links;
-- executable-file behavior.
-
-## What was validated
-
-The lab validates:
-
-- directory creation;
-- regular-file creation;
-- default creation modes;
-- symbolic chmod;
-- octal chmod;
-- output redirection;
-- append behavior;
-- copy and rename;
-- hard links;
-- symbolic links;
-- link-count / object correlation;
-- broken symlink behavior;
-- execute-bit changes;
-- successful shell-command execution;
-- final return code 0.
-
-## Permission model
-
-With the tested `umask 0022`:
-
-```text
-directory base mode = 777
-file base mode      = 666
-        |
-        v
-apply umask
-        |
-        v
-directory -> 755
-file      -> 644
-```
-
-This introduces the POSIX permission model used by USS.
-
-## Hard links vs symbolic links
-
-```text
-hard link
-  |
-  +--> another directory entry for the same underlying object
-
-symbolic link
-  |
-  +--> separate object containing a pathname reference
-```
-
-The lab demonstrates both models directly.
-
-## Security limitation
-
-The shell environment observed in Lab 01 is privileged.
-
-Therefore Lab 02 proves:
-
-- permission metadata;
-- ownership-related observations;
-- mode changes;
-- link semantics;
-- executable-file behavior.
-
-It does **not** claim to validate ordinary non-privileged denial behavior.
-
-That should be tested later with a controlled non-privileged RACF identity.
-
----
-
-# Lab 03 — USS Process and Runtime Management
-
-## Objective
-
-Demonstrate process execution and runtime control inside USS.
-
-The lab focuses on:
-
-- process listing;
-- PID and PPID;
-- background execution;
-- shell job control;
-- signal-based termination;
-- wait behavior;
-- exit status interpretation.
-
-## What was validated
-
-The lab demonstrates:
-
-- `ps`;
-- `ps -f`;
-- PID;
-- PPID;
-- foreground and background execution;
-- `jobs`;
-- shell job identifiers;
-- `$!`;
-- `kill`;
-- `wait`;
-- `$?`;
-- normal completion;
-- signal termination;
-- process cleanup.
-
-## Process model
-
-```text
-interactive shell
-      |
-      +--> foreground command
-      |
-      +--> background process
-                |
-                +--> PID
-                +--> shell job ID
-```
-
-The lab keeps shell job IDs and UNIX process IDs separate.
-
-This matters operationally because shell job control and process-level signaling are related but distinct mechanisms.
-
-## Exit status
-
-Observed behavior:
-
-```text
-normal wait -> status 0
-
-SIGTERM termination -> status 143
-```
-
-The observed status 143 is consistent with:
-
-```text
-128 + 15
-```
-
-where signal 15 is SIGTERM.
-
-This becomes important later when USS execution is driven from JCL and return status must be interpreted outside the shell.
-
----
-
-## Current validated capabilities
-
-| Capability | Status |
+| Capability | Evidence |
 |---|---|
-| OMVS shell access | Validated |
-| POSIX UID / GID observation | Validated |
-| RACF OMVS segment correlation | Validated |
-| HOME / shell-program observation | Validated |
-| HFS / zFS observation | Validated |
-| BPXPRM selection correlation | Validated |
-| file / directory operations | Validated |
-| `umask` / `chmod` | Validated |
-| hard links | Validated |
-| symbolic links | Validated |
-| executable command file | Validated |
-| PID / PPID inspection | Validated |
-| background process execution | Validated |
-| shell job control | Validated |
-| signal termination | Validated |
-| `wait` / exit-status interpretation | Validated |
+| OMVS shell access | Lab 01 |
+| Effective UID/GID observation | Lab 01 |
+| RACF OMVS attribute correlation | Lab 01 |
+| HFS/zFS observation | Lab 01 |
+| BPXPRM/PARMLIB selection correlation | Lab 01 |
+| File and directory operations | Lab 02 |
+| `umask` and `chmod` | Lab 02 |
+| Hard and symbolic links | Lab 02 |
+| Executable command-file behavior | Lab 02 |
+| PID/PPID inspection | Lab 03 |
+| Background execution and shell jobs | Lab 03 |
+| Signals, `wait` and exit status | Lab 03 |
+| `/bin/sh` script execution | Lab 04 Part 1 |
+| Variables and positional parameters | Lab 04 Part 1 |
+| POSIX conditional logic | Lab 04 Part 1 |
+| Explicit application return codes | Lab 04 Part 1 |
+| POSIX `for` loop | Lab 04 Part 1 |
 
----
+### NOT YET CLAIMED AS VALIDATED HERE
 
-## Current boundaries
-
-The repository does **not** currently claim full validation of:
-
-- dedicated shell scripting;
-- non-privileged POSIX authorization behavior;
-- JCL / BPXBATCH integration;
+- ordinary non-privileged POSIX authorization behavior;
+- Lab 04 Part 2 scripting topics;
 - MVS-to-USS dataset/file movement;
+- JCL/BPXBATCH execution;
 - scheduler-driven USS execution;
 - production-like USS network services;
 - end-to-end AT-TLS-protected USS services;
 - full zFS lifecycle administration;
-- complete USS logging / SMF correlation.
+- complete USS logging/SMF correlation.
 
-These are future integration areas.
+This distinction is intentional: architecture and roadmap items are not presented as completed evidence.
 
 ---
 
-## Relationship with RACF
-
-RACF remains the authority for identity and authorization.
-
-USS consumes RACF-defined UNIX identity attributes.
+## Architecture and ownership boundaries
 
 ```text
-RACF
- |
- +--> user OMVS segment
- +--> group OMVS segment
+                    IBM z/OS
+                       |
+       +---------------+---------------+
+       |               |               |
+       v               v               v
+   RACF / SAF       JCL / JES2       TCP/IP
+       |               |               |
+       +---------------+---------------+
+                       |
+                       v
+                   USS / OMVS
+                       |
+          +------------+------------+
+          |            |            |
+          v            v            v
+       identity     filesystem    processes
+                                    |
+                                    v
+                                   shell
+```
+
+Repository ownership remains explicit:
+
+| Domain | Primary ownership |
+|---|---|
+| **USS** | POSIX runtime, shell, UNIX pathnames, files, processes and UNIX exit status |
+| **RACF** | identity and authorization policy, UNIXPRIV, STARTED mappings and security controls |
+| **JCL/JES2** | batch job structure, steps, DDs, JES execution and batch control |
+| **Workload automation** | scheduling, dependencies, resources and operational decisions |
+| **Communications Server** | TCP/IP profile, listeners, ports, Policy Agent and AT-TLS |
+| **Core z/OS** | IPL, IEASYS, PARMLIB, BPXPRM and system-level configuration |
+
+See [Ecosystem Integration](docs/ECOSYSTEM-INTEGRATION.md) for the detailed cross-repository model.
+
+---
+
+## Evidence model
+
+Labs follow an evidence-first workflow:
+
+```text
+BUILD
+  |
+  v
+EXECUTE
+  |
+  v
+OBSERVE
+  |
+  v
+DIAGNOSE
+  |
+  v
+CORRECT
+  |
+  v
+VALIDATE
+  |
+  v
+DOCUMENT
+```
+
+A useful lab record answers:
+
+- what was executed;
+- which environment and identity were active;
+- what changed;
+- what result or return status was produced;
+- what evidence proves the result;
+- what limitations affect interpretation.
+
+Failed or environment-specific attempts are retained when they explain real behavior rather than being rewritten as artificial success.
+
+---
+
+## Integration roadmap
+
+The current evidence supports a progression toward deeper cross-domain integration:
+
+```text
+Lab 04 Part 2
+shell scripting depth
         |
         v
-USS
- |
- +--> UID
- +--> GID
- +--> HOME
- +--> PROGRAM
- +--> runtime identity
+non-privileged RACF / OMVS validation
+        |
+        v
+MVS <-> USS data movement
+        |
+        v
+JCL / BPXBATCH
+        |
+        v
+runtime diagnostics / logging
+        |
+        v
+network-service correlation
 ```
 
-The dedicated RACF repository owns the deeper security topics:
-
-- effective authority;
-- UNIXPRIV;
-- STARTED mappings;
-- least privilege;
-- privileged delegation;
-- RACF policy changes.
-
-This repository focuses on how those identities appear and behave from the USS runtime side.
-
----
-
-## Relationship with Communications Server
-
-USS and Communications Server meet when UNIX-hosted processes or configuration participate in network services.
-
-Conceptually:
-
-```text
-TCP/IP
-  |
-  v
-listener / network service
-  |
-  v
-USS process
-  |
-  +--> /etc configuration
-  +--> UNIX identity
-  +--> filesystem permissions
-  +--> runtime process state
-```
-
-Ownership remains separated:
-
-```text
-Communications Server
- -> TCP/IP profile, listeners, ports, Policy Agent, AT-TLS
-
-USS
- -> process runtime, shell, /etc files, permissions, ownership
-
-RACF
- -> identity and authorization
-```
-
----
-
-## Relationship with JCL and BPXBATCH
-
-A major future integration milestone is JCL-driven USS execution.
-
-Target architecture:
-
-```text
-JCL
- |
- +--> EXEC PGM=BPXBATCH
-          |
-          v
-        USS
-          |
-          +--> shell command
-          +--> script
-          +--> file operation
-          +--> process
-          |
-          v
-     exit status / output
-          |
-          v
-       JCL step RC
-```
-
-This will connect `JCL_LABS` and `UNIX_System_Services-` without duplicating their roles.
-
-JCL remains responsible for:
-
-- job structure;
-- step sequencing;
-- DD statements;
-- JES2 execution context;
-- restart / condition logic.
-
-USS remains responsible for:
-
-- shell behavior;
-- UNIX pathnames;
-- POSIX processes;
-- UNIX exit status.
-
----
-
-## Relationship with the scheduler
-
-Later integration can extend the execution chain:
+Target execution chains such as the following remain **cross-domain objectives until evidence is published**:
 
 ```text
 Scheduler
@@ -502,187 +276,34 @@ USS script / process
 exit status
    |
    v
-JCL RC
-   |
-   v
-Scheduler decision
-```
-
-This architecture is planned.
-
-It is not yet validated by the current USS labs.
-
----
-
-## Relationship with core z/OS engineering
-
-The central engineering repository owns the system-level configuration that USS depends on.
-
-Examples:
-
-- IPL;
-- IEASYS;
-- PARMLIB;
-- BPXPRM;
-- system-wide HFS/zFS configuration;
-- storage;
-- diagnostics;
-- restart and recovery.
-
-The USS repository consumes those facilities and demonstrates runtime behavior inside the selected environment.
-
-```text
-core z/OS engineering
-       |
-       v
-system-selected USS configuration
-       |
-       v
-UNIX_System_Services-
-       |
-       v
-runtime observation and practical POSIX behavior
+batch / scheduler decision
 ```
 
 ---
 
-## HFS and zFS
+## Related engineering domains
 
-The tested environment contains a mixed HFS / zFS pathname space.
+- [Mainframe RACF Security Evidence](https://github.com/P-dot/mainframe-racf-security-evidence)
+- [z/OS Communications Server Network Lab](https://github.com/P-dot/zos-communications-server-network-lab)
+- [JCL Labs](https://github.com/P-dot/JCL_LABS)
+- [z/OS Batch Scheduler](https://github.com/P-dot/zos-batch-scheduler)
+- [MVS TSO/ISPF](https://github.com/P-dot/MVS_TSO_ISPF)
+- [REXX](https://github.com/P-dot/Rexx)
+- [Core z/OS / ADCD / Hercules Engineering](https://github.com/P-dot/zos-adcd-hercules-engineering-lab)
 
-The repository preserves that fact rather than assuming one filesystem technology.
-
-```text
-USS pathname tree
-    |
-    +--> HFS-backed areas
-    |
-    +--> zFS-backed areas
-```
-
-Future system-level zFS creation, mount persistence, backup or recovery work should be coordinated with the central engineering repository.
-
----
-
-## POSIX permissions vs RACF dataset protection
-
-USS permissions and RACF dataset profiles are different mechanisms.
-
-```text
-MVS dataset
-   -> RACF DATASET class
-
-USS file
-   -> owner
-   -> group
-   -> mode bits
-   -> RACF-backed UNIX identity
-   -> additional z/OS UNIX security controls
-```
-
-`chmod` does not replace RACF.
-
-Future labs should continue to document how the two security models coexist.
-
----
-
-## Planned progression
-
-The next practical progression should move from the current runtime baseline toward controlled integration.
-
-Suggested order:
-
-```text
-Lab 04
-shell scripting
-        |
-        v
-Lab 05
-non-privileged RACF / OMVS identity validation
-        |
-        v
-Lab 06
-MVS-to-USS data movement
-        |
-        v
-Lab 07
-JCL / BPXBATCH
-        |
-        v
-Lab 08
-runtime / logging / troubleshooting
-        |
-        v
-Lab 09
-network-service correlation
-```
-
-Exact numbering can be adjusted as the repository evolves.
-
-The important point is the dependency sequence.
-
----
-
-## Evidence methodology
-
-Each lab should answer:
-
-```text
-What command was executed?
-What environment was active?
-What identity executed it?
-What object changed?
-What result was returned?
-What evidence proves it?
-What limitation affects interpretation?
-```
-
-Useful evidence includes:
-
-- command output;
-- terminal captures;
-- `id`;
-- `pwd`;
-- `ls -l`;
-- `ls -li`;
-- `df -k`;
-- `ps`;
-- `jobs`;
-- return codes;
-- RACF OMVS information;
-- operator displays;
-- relevant PARMLIB excerpts;
-- troubleshooting notes;
-- screenshots where they add value.
-
-Failed attempts should be preserved when they explain release-specific or environment-specific behavior.
+The learning journey can pass through `MVS_TSO_ISPF → JCL_LABS → zos-batch-scheduler → Rexx → UNIX_System_Services-`; that learning sequence does not imply that these repositories share the same runtime ownership.
 
 ---
 
 ## Publication security
 
-Before publication, review evidence for unnecessary exposure of:
+Before publication, evidence should be reviewed for unnecessary exposure of host IP addresses, MAC addresses, hostnames, local workstation paths, credentials, secrets, tokens, private keys, sensitive certificate material, terminal/session identifiers and other host-side network details.
 
-- host IP addresses;
-- MAC addresses;
-- hostnames;
-- Windows user information;
-- local host filesystem paths;
-- terminal/session identifiers;
-- credentials;
-- secrets;
-- tokens;
-- private keys;
-- sensitive certificate material;
-- host-side network details.
-
-Only include system identifiers when they are relevant to the lab and suitable for public documentation.
+Only information required to explain the laboratory should be published.
 
 ---
 
 ## Repository structure
-
-Current high-level structure:
 
 ```text
 .
@@ -693,117 +314,19 @@ Current high-level structure:
 └── labs/
     ├── 01-uss-environment-baseline/
     ├── 02-uss-filesystem-posix-permissions/
-    └── 03-uss-process-runtime-management/
+    ├── 03-uss-process-runtime-management/
+    └── 04-uss-shell-scripting/
 ```
+
+Individual lab READMEs remain the authoritative evidence summaries for their exercises. This root README is intentionally a navigation and engineering overview rather than a duplicate of every lab.
 
 ---
 
-## Ecosystem integration
+## Portfolio position
 
-For the detailed architectural role of this repository, see:
+**Portfolio:** [IBM z/OS Mainframe Engineering Portfolio](https://github.com/P-dot/P-dot)
+**Architecture:** [Architecture V2](https://github.com/P-dot/zos-adcd-hercules-engineering-lab/tree/main/docs/architecture/v2)
+**Engineering control:** [Engineering Control](https://github.com/P-dot/zos-adcd-hercules-engineering-lab/tree/main/docs/engineering-control)
+**Detailed USS integration:** [Ecosystem Integration](docs/ECOSYSTEM-INTEGRATION.md)
 
-[`docs/ECOSYSTEM-INTEGRATION.md`](docs/ECOSYSTEM-INTEGRATION.md)
-
-That document defines:
-
-- repository ownership boundaries;
-- validated vs planned capabilities;
-- RACF integration;
-- Communications Server integration;
-- JCL / BPXBATCH integration;
-- scheduler integration;
-- storage and zFS relationships;
-- cross-repository branches;
-- long-term maturity path.
-
----
-
-## Wider z/OS lab ecosystem
-
-This repository is part of the broader engineering environment centered around:
-
-[`P-dot/zos-adcd-hercules-engineering-lab`](https://github.com/P-dot/zos-adcd-hercules-engineering-lab)
-
-Relevant companion repositories include:
-
-- `P-dot/mainframe-racf-security-evidence`
-- `P-dot/zos-communications-server-network-lab`
-- `P-dot/JCL_LABS`
-- `P-dot/zos-batch-scheduler`
-- `P-dot/MVS_TSO_ISPF`
-- `P-dot/Rexx`
-- `P-dot/COBOL`
-- `P-dot/vsam01`
-- `P-dot/DB2-`
-- `P-dot/CICS`
-- `P-dot/PL-I`
-- `P-dot/z_Assembly`
-
-Within that architecture, this repository provides the practical USS / OMVS / POSIX runtime layer.
-
----
-
-## Target architecture
-
-```text
-z/OS
- |
- +--> RACF / SAF
- |
- +--> JES2 / JCL
- |
- +--> TCP/IP
- |
- +--> storage / HFS / zFS
- |
- +--> USS / OMVS
-        |
-        +--> POSIX identity
-        +--> files / directories
-        +--> permissions
-        +--> processes
-        +--> shell
-        +--> scripts
-        +--> BPXBATCH
-        +--> network-facing runtime
-```
-
-Long-term integration path:
-
-```text
-RACF identity
-    |
-    v
-USS runtime
-    |
-    +--> filesystem
-    +--> process model
-    +--> scripting
-    |
-    v
-JCL / BPXBATCH
-    |
-    v
-scheduler / operational integration
-```
-
----
-
-## Status
-
-Current completed foundation:
-
-```text
-Lab 01
-environment baseline
-
-Lab 02
-filesystem and POSIX permissions
-
-Lab 03
-process and runtime management
-```
-
-This repository now has a validated USS baseline across environment, filesystem and process/runtime behavior.
-
-The next step is to build controlled automation and MVS-to-USS integration on top of that foundation.
+`UNIX_System_Services-` provides the practical **USS / OMVS / POSIX runtime layer** of that ecosystem.
