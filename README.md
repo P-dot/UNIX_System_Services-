@@ -330,3 +330,14 @@ Individual lab READMEs remain the authoritative evidence summaries for their exe
 **Detailed USS integration:** [Ecosystem Integration](docs/ECOSYSTEM-INTEGRATION.md)
 
 `UNIX_System_Services-` provides the practical **USS / OMVS / POSIX runtime layer** of that ecosystem.
+
+
+---
+
+## z/OS Engineering Academy
+
+**Academy role:** UNIX School — connect POSIX processes and filesystems to native z/OS services.
+
+[Start the Academy](https://github.com/P-dot/P-dot/blob/main/docs/ACADEMY.md) · [Course Catalog](https://github.com/P-dot/P-dot/blob/main/docs/COURSES.md) · [Curriculum Graph](https://github.com/P-dot/P-dot/blob/main/docs/CURRICULUM.md) · [Cross-Domain Relationships](https://github.com/P-dot/P-dot/blob/main/docs/RELATIONSHIPS.md)
+
+> Learn the concept → execute the lab → interpret the evidence → understand the subsystem boundary → continue to the next connected course.
