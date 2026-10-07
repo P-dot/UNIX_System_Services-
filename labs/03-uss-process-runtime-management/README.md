@@ -49,3 +49,12 @@ Long numeric PIDs should not be reconstructed from unclear screenshots. Where sh
 ## Status
 
 **COMPLETED — practical objectives validated with terminal evidence.**
+
+
+---
+### Continue learning
+
+**Previous:** [02-uss-filesystem-posix-permissions](../02-uss-filesystem-posix-permissions/)  
+**Course:** [Course home](../../README.md)  
+**Next:** [04-uss-shell-scripting](../04-uss-shell-scripting/)  
+**Academy:** [z/OS Engineering Academy](https://github.com/P-dot/P-dot/blob/main/docs/ACADEMY.md) · [Curriculum](https://github.com/P-dot/P-dot/blob/main/docs/CURRICULUM.md)

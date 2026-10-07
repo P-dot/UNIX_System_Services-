@@ -68,3 +68,12 @@ The original cumulative DOCX is preserved unchanged under `evidence/source/`. Em
 **Lab 04 Part 1: COMPLETED**
 
 **Lab 04 Part 2: PENDING**
+
+
+---
+### Continue learning
+
+**Previous:** [03-uss-process-runtime-management](../03-uss-process-runtime-management/)  
+**Course:** [Course home](../../README.md)  
+**Next:** [Choose the next Academy course](https://github.com/P-dot/P-dot/blob/main/docs/COURSES.md)  
+**Academy:** [z/OS Engineering Academy](https://github.com/P-dot/P-dot/blob/main/docs/ACADEMY.md) · [Curriculum](https://github.com/P-dot/P-dot/blob/main/docs/CURRICULUM.md)

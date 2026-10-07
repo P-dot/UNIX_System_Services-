@@ -91,3 +91,12 @@ Screenshots are stored in [`evidence/screenshots/`](evidence/screenshots/). The 
 ## Result
 
 **Completed and validated.** The final execution returned **RC=0** and all filesystem changes remained confined to `/u/ibmuser/uss-lab02`.
+
+
+---
+### Continue learning
+
+**Previous:** [01-uss-environment-baseline](../01-uss-environment-baseline/)  
+**Course:** [Course home](../../README.md)  
+**Next:** [03-uss-process-runtime-management](../03-uss-process-runtime-management/)  
+**Academy:** [z/OS Engineering Academy](https://github.com/P-dot/P-dot/blob/main/docs/ACADEMY.md) · [Curriculum](https://github.com/P-dot/P-dot/blob/main/docs/CURRICULUM.md)

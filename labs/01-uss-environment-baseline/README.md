@@ -101,3 +101,12 @@ Screenshots are stored in [`evidence/screenshots/`](evidence/screenshots/). The 
 ## Result
 
 **Completed.** The lab establishes a version-specific USS baseline for this ADCD z/OS 1.11 system without changing RACF, PARMLIB, mounts, permissions or shell configuration.
+
+
+---
+### Continue learning
+
+**Previous:** Course introduction  
+**Course:** [Course home](../../README.md)  
+**Next:** [02-uss-filesystem-posix-permissions](../02-uss-filesystem-posix-permissions/)  
+**Academy:** [z/OS Engineering Academy](https://github.com/P-dot/P-dot/blob/main/docs/ACADEMY.md) · [Curriculum](https://github.com/P-dot/P-dot/blob/main/docs/CURRICULUM.md)
